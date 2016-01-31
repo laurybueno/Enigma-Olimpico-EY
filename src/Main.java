@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Main {
@@ -99,17 +98,160 @@ public class Main {
 	
 	public static void main(String[] args){
 		
+		int testes = 0;
 		// roda até encontrar uma combinação válida
 		while(true){
-			
+
 			// embaralha todas as informações aleatoriamente
 			reset();
-			
-			
 
+			if(testa()) {
+				printa();
+				break;
+			}
+			
+			testes++;
+			
+			if(testes%1000000 == 0) System.out.println(testes);
 		}
-
 	}
+
+	/****************************
+	 * Bloco de buscadores
+	 ****************************/
+	// busca por idade
+	private static int buscaIdade(int n){
+		
+		for (int i = 0; i < turistas.length; i++) {
+			if(turistas[i].idade == n) return i;
+		}
+		return -1;
+	}
+	
+	// busca por nacionalidade
+	private static int buscaNacionalidade(String x){
+		
+		for (int i = 0; i < turistas.length; i++) {
+			if(turistas[i].nacionalidade.equalsIgnoreCase(x)) return i;
+		}
+		return -1;
+	}
+	
+	// busca por hotel
+	private static int buscaHotel(String x){
+
+		for (int i = 0; i < turistas.length; i++) {
+			if(turistas[i].hotel.equalsIgnoreCase(x)) return i;
+		}
+		return -1;
+	}
+
+
+	// busca por esportePessoal
+	private static int buscaEsportePessoal(String x){
+
+		for (int i = 0; i < turistas.length; i++) {
+			if(turistas[i].esportePessoal.equalsIgnoreCase(x)) return i;
+		}
+		return -1;
+	}
+
+
+	// busca por esporte
+	private static int buscaEsporte(String x){
+
+		for (int i = 0; i < turistas.length; i++) {
+			if(turistas[i].esporte.equalsIgnoreCase(x)) return i;
+		}
+		return -1;
+	}
+
+	// busca por turismo
+	private static int buscaTurismo(String x){
+
+		for (int i = 0; i < turistas.length; i++) {
+			if(turistas[i].turismo.equalsIgnoreCase(x)) return i;
+		}
+		return -1;
+	}
+	
+	
+	/****************************
+	 * Bloco de regras do Teste de Einstein modificado
+	 ****************************/
+	private static boolean testa(){
+		
+		// A chilena pratica triathlon.
+		int chilena = buscaNacionalidade("Chile");
+		if(!turistas[chilena].esportePessoal.equals("Triathlon")) return false;
+		
+		// A espanhola ficará hospedada no bairro da Urca.
+		int espanhola = buscaNacionalidade("Espanha");
+		if(!turistas[espanhola].hotel.equals("Urca")) return false;
+		
+		// A italiana gostaria de realizar um passeio turístico para conhecer o estádio do Maracanã.
+		int italiana = buscaNacionalidade("Italia");
+		if(!turistas[italiana].turismo.equals("Maracana")) return false;
+		
+		// A turista que pratica tênis é mais de um ano mais velha do que a que possui corrida como esporte pessoal.
+		int tenista = buscaEsportePessoal("Tenis");
+		int corredora = buscaEsportePessoal("Corrida");
+		if(!(turistas[tenista].idade > turistas[corredora].idade+1)) return false;
+		
+		// A turista que gosta de praticar corrida gostaria de conhecer o Pão de Açúcar.
+		if(!turistas[corredora].turismo.equals("Pao de Acucar")) return false;
+		
+		// A turista que pretende assistir Vôlei de Praia está hospedada em um hotel em Botafogo.
+		int veVolei = buscaEsporte("Volei de Praia");
+		if(!turistas[veVolei].hotel.equals("Botafogo")) return false;
+		
+		// A turista que pratica handebol deseja assistir às competições de Hipismo.
+		int praticaHandebol = buscaEsportePessoal("Handebol");
+		if(!turistas[praticaHandebol].esporte.equals("Hipismo")) return false;
+		
+		// A turista de 22 anos gostaria de conhecer a praia de Ipanema.
+		int idade22 = buscaIdade(22);
+		if(!turistas[idade22].turismo.equals("Ipanema")) return false;
+		
+		// A argentina possui 20 anos.
+		int argentina = buscaNacionalidade("Argentina");
+		if(!(turistas[argentina].idade == 20)) return false;
+		
+		// Quem irá assistir Atletismo nos Jogos Olímpicos tem um ano de diferença em relação a quem está hospedada em Ipanema.
+		int veAtletismo = buscaEsporte("Atletismo");
+		int hotelIpanema = buscaHotel("Ipanema");
+		if(!(Math.abs( turistas[veAtletismo].idade - turistas[hotelIpanema].idade ) == 1)) return false;
+		
+		// A turista hospedada na Barra da Tijuca tem um ano de diferença em relação à turista que pretende assistir às competições de Hipismo.
+		int hotelBarra = buscaHotel("Barra da Tijuca");
+		int veHipismo = buscaEsporte("Hipismo");
+		if(!(Math.abs( turistas[hotelBarra].idade - turistas[veHipismo].idade ) == 1)) return false;
+		
+		// A turista que deseja assistir às competições de Saltos Ornamentais deseja conhecer a Praia do Pepê.
+		int veSaltos = buscaEsporte("Saltos Ornamentais");
+		if(!turistas[veSaltos].turismo.equals("Praia do Pepe")) return false;
+		
+		// A belga quer assistir às competições de Natação nos Jogos Olímpicos.
+		int belga = buscaNacionalidade("Belgica");
+		if(!turistas[belga].esporte.equals("Natacao")) return false;
+		
+		// A argentina tem um ano de diferença em relação à turista que gosta de jogar futebol.
+		int praticaFutebol = buscaEsportePessoal("Futebol");
+		if(!(Math.abs( turistas[argentina].idade - turistas[praticaFutebol].idade ) == 1)) return false;
+		
+		// Quem deseja assistir às competições de Atletismo tem um ano de diferença em relação a quem pretende conhecer a praia de Copacabana.
+		int turismoCopa = buscaTurismo("Copacabana");
+		if(!(Math.abs( turistas[veAtletismo].idade - turistas[turismoCopa].idade ) == 1)) return false;
+		
+		// a combinação sugerida passou por todos os testes e deve ser a correta
+		return true;
+		
+	}
+	
+	
+	
+	
+	
 	
 
 }
