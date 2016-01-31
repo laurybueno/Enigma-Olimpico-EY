@@ -1,3 +1,4 @@
+package einstein;
 
 public class Turista {
 	
